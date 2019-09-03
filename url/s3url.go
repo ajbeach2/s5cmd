@@ -4,6 +4,7 @@ package url
 import "strings"
 import "errors"
 import "net/url"
+import "log"
 
 const (
 	// S3WildCharacters is valid wildcard characters for a S3Url
@@ -56,8 +57,18 @@ func ParseS3Url(object string) (*S3Url, error) {
 	}
 
 	// fmt.Println(url.PathEscape(key))
+	// escaped := url.PathEscape(key)
+	// newKey := strings.Replace(escaped, "%2", "/", -1)
+	u, err := url.Parse("s3://" + parts[2] + "/" + key)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("sdfasdfasdf\n\n\n\nasdfasdfasdfasdfasdf")
+
+	trimmed := strings.TrimLeft(u.EscapedPath(), "/")
+
 	return &S3Url{
 		parts[2],
-		url.PathEscape(key),
+		trimmed,
 	}, nil
 }
